@@ -1,2 +1,2 @@
 # super-couscous
-Theta communications.
+Super-Couscous communications.
