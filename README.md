@@ -1,4 +1,4 @@
-# super-couscous
+# Super-couscous
 Super-Couscous communications.
 
 
