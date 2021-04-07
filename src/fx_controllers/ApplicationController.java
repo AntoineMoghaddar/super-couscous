@@ -6,7 +6,4 @@ public class ApplicationController {
 
     public ListView MessageViewList;
 
-
-
-
 }

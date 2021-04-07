@@ -22,7 +22,7 @@ public class MyProtocol {
     // The port to connect to. 8954 for the simulation server.
     private static int SERVER_PORT = 8954;
     // The frequency to use.
-    private static int frequency = -1;//TODO: Set this to your group frequency!
+    private static int frequency = 3800;//TODO: Set this to your group frequency!
 
     private BlockingQueue<Message> receivedQueue;
     private BlockingQueue<Message> sendingQueue;
