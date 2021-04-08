@@ -74,7 +74,10 @@ public class MyProtocol {
 
         public void printByteBuffer(ByteBuffer bytes, int bytesLength) {
             for (int i = 0; i < bytesLength; i++) {
-                System.out.print(Byte.toString(bytes.get(i)) + " ");
+                char byt = (char)bytes.get(i);
+                System.out.print(byt + " "); // try
+
+                //System.out.print(Byte.toString(bytes.get(i)) + " ");
             }
             System.out.println();
         }
