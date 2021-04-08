@@ -4,6 +4,7 @@ import design.logging.Logger;
 import framework.client.Client;
 import framework.client.Message;
 import framework.client.MessageType;
+import packets.Address;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -138,6 +139,11 @@ public class MyProtocol {
                         String data = printByteBuffer(m.getData(), m.getData().capacity());
 
                         if (data.startsWith("IP")) {
+                            Logger.confirm("this is IP data.");
+//                            Address a = new Address(data.toString());
+                            System.out.println(data);
+                        } else {
+                            Logger.confirm("this is not IP data.");
                             System.out.println(data);
                         }
 
