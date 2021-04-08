@@ -1,9 +1,12 @@
 package framework;
 
+import design.logging.Logger;
 import framework.client.Client;
 import framework.client.Message;
 import framework.client.MessageType;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
@@ -32,6 +35,7 @@ public class MyProtocol {
         sendingQueue = new LinkedBlockingQueue<Message>();
 
         new Client(SERVER_IP, SERVER_PORT, frequency, receivedQueue, sendingQueue); // Give the client the Queues to use
+        broadcastIP();
 
         new receiveThread(receivedQueue).start(); // Start thread to handle received messages!
 
@@ -45,12 +49,39 @@ public class MyProtocol {
                 ByteBuffer toSend = ByteBuffer.allocate(inputBytes.length); // make a new byte buffer with the length of the input string
                 toSend.put(inputBytes, 0, inputBytes.length); // copy the input string into the byte buffer.
                 Message msg;
+
                 if ((input.length()) > 2) {
+//                    msg = new Message(MessageType.DATA, toSend, inputBytes.length);
                     msg = new Message(MessageType.DATA, toSend);
+
                 } else {
                     msg = new Message(MessageType.DATA_SHORT, toSend);
                 }
                 sendingQueue.put(msg);
+            }
+        } catch (InterruptedException e) {
+            System.exit(2);
+        }
+    }
+
+    private void broadcastIP() {
+        String input = null;
+        try {
+            try {
+                input = InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+
+            Logger.notice(input);
+
+            if (input != null) {
+                byte[] inputBytes = input.getBytes(); // get bytes from input
+                ByteBuffer toSend = ByteBuffer.allocate(inputBytes.length); // make a new byte buffer with the length of the input string
+                Logger.notice(toSend);
+                Message bc = new Message(MessageType.DATA, toSend);
+
+                sendingQueue.put(bc);
             }
         } catch (InterruptedException e) {
             System.exit(2);
@@ -83,6 +114,8 @@ public class MyProtocol {
         public void run() {
             while (true) {
                 try {
+                    Logger.println(Logger.Type.CONSOLE, java.time.LocalTime.now().toString());
+
                     Message m = receivedQueue.take();
                     if (m.getType() == MessageType.BUSY) { // The channel is busy (A node is sending within our detection range)
                         System.out.println("BUSY");

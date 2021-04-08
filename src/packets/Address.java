@@ -5,34 +5,29 @@ import java.net.UnknownHostException;
 
 public class Address {
 
-    private static int ip_id;
-    private String local_host;
-
-    public Address(String getLocalhost) {
-        this.local_host = getLocalhost;
-        ip_id++;
-    }
+    private int ip_id;
+    private String ip_address;
 
     public Address(String getLocalhost, int id) {
-        this.local_host = getLocalhost;
+        this.ip_address = getLocalhost;
         ip_id = id;
     }
 
-    public Address() {
+    public Address(int ip_id) {
         try {
-            this.local_host = InetAddress.getLocalHost().getHostAddress();
-            System.out.println(local_host);
+            this.ip_address = InetAddress.getLocalHost().getHostAddress();
+            System.out.println(ip_address);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        ip_id++;
+        this.ip_id = ip_id;
     }
 
-    public static int getIp_id() {
+    public int getIp_id() {
         return ip_id;
     }
 
-    public String getLocal_host() {
-        return local_host;
+    public String getIp_address() {
+        return ip_address;
     }
 }

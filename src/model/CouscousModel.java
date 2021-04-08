@@ -1,85 +1,53 @@
 package model;
 
-import design.Logger;
+import design.logging.Logger;
+import design.transfer.ExportIP;
+import design.transfer.ImportIP;
 import org.apache.commons.codec.binary.Hex;
 import packets.Address;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class CouscousModel {
 
     private ArrayList<Address> addresses;
+    private ImportIP in;
+    private ExportIP out;
 
-    //TODO Add singleton methods
-    private void run() {
-        //TODO for testing purposes only
-        createFile("addressing.txt");
-        addresses = new ArrayList<>();
+    private static CouscousModel instance = null;
+    private static int ip_id = 0;
 
-        Address dummy = new Address();
-        addresses.add(dummy);
+    private CouscousModel() {
+        in = new ImportIP();
+        out = new ExportIP();
 
+        addresses = in.getAddresses();
+        out.createFile("addressing.txt");
     }
 
-    public void createFile(String filename) {
-        try {
-            File myObj = new File(filename);
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+    public static CouscousModel getInstance() {
+        if (instance == null)
+            instance = new CouscousModel();
+
+        return instance;
     }
 
-    public void writeToFile(String filename) {
-        try {
-            FileWriter myWriter = new FileWriter(filename);
+    public void addIP(String ipaddress) {
+        boolean create = true;
 
-//          TODO  myWriter.write();
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    public void readFromFile(String filename) {
-        try {
-            Scanner in = new Scanner(new File(filename));
-            while (in.hasNextLine()) {
-                String line = in.nextLine();
-                if (!(line.startsWith("#")) && !(line.isEmpty())) {
-                    processLine(line);
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void processLine(String line) {
-        String[] lineData = line.split(";");
-        if (line.isEmpty()) {
-            System.out.println("No data found.");
+        for (Address ip : addresses) {
+            if (ip.getIp_address().equals(ipaddress))
+                create = false;
         }
 
-        if (lineData.length >= 1) {
-            Address ip = new Address(lineData[2], Integer.parseInt(lineData[1]));
-            addresses.add(ip);
-        }
+        if (create)
+            addresses.add(new Address(ipaddress, ip_id));
+        else
+            Logger.err("IP already exists.");
+
     }
 
     public ArrayList<Address> getAddresses() {
@@ -119,10 +87,4 @@ public class CouscousModel {
             throw new RuntimeException(e);
         }
     }
-
-    public static void main(String[] args) {
-        new CouscousModel().run();
-    }
-
-
 }
