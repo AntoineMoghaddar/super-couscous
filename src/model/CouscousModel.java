@@ -47,7 +47,7 @@ public class CouscousModel {
         try {
             FileWriter myWriter = new FileWriter(filename);
 
-//            myWriter.write();
+//          TODO  myWriter.write();
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
@@ -80,6 +80,10 @@ public class CouscousModel {
             Address ip = new Address(lineData[2], Integer.parseInt(lineData[1]));
             addresses.add(ip);
         }
+    }
+
+    public ArrayList<Address> getAddresses() {
+        return addresses;
     }
 
     /**
