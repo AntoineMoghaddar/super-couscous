@@ -4,8 +4,8 @@ import framework.client.Client;
 import framework.client.Message;
 import framework.client.MessageType;
 
-import java.io.Console;
 import java.nio.ByteBuffer;
+import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -37,10 +37,10 @@ public class MyProtocol {
 
         // handle sending from stdin from this thread.
         try {
-            Console console = System.console();
+            Scanner console = new Scanner(System.in);
             String input = "";
             while (true) {
-                input = console.readLine(); // read input
+                input = console.nextLine(); // read input
                 byte[] inputBytes = input.getBytes(); // get bytes from input
                 ByteBuffer toSend = ByteBuffer.allocate(inputBytes.length); // make a new byte buffer with the length of the input string
                 toSend.put(inputBytes, 0, inputBytes.length); // copy the input string into the byte buffer.
