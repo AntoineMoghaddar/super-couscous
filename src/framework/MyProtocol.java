@@ -138,9 +138,9 @@ public class MyProtocol {
                         String data = printByteBuffer(m.getData(), m.getData().capacity());
 
                         if (data.startsWith("IP")) {
-                            Logger.debug(data);
+                            System.out.println(data);
                         }
-// if()
+
                     } else if (m.getType() == MessageType.DATA_SHORT) { // We received a short data frame!
                         System.out.print("DATA_SHORT: ");
                         printByteBuffer(m.getData(), m.getData().capacity()); //Just print the data
