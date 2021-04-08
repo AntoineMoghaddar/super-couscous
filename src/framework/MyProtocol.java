@@ -110,14 +110,14 @@ public class MyProtocol {
         }
 
         public String printByteBuffer(ByteBuffer bytes, int bytesLength) {
+            StringBuilder data = new StringBuilder();
             for (int i = 0; i < bytesLength; i++) {
                 // char byt = (char)bytes.get(i);
                 // System.out.print((char) bytes.get(i)); // try
 //                  System.out.print(bytes.get(i) + " ");
-                System.out.print((char) bytes.get(i));
-                return String.valueOf((char) bytes.get(i));
+                data.append((char) bytes.get(i));
             }
-            return null;
+            return data.toString();
         }
 
         // Handle messages from the server / audio framework
@@ -133,7 +133,7 @@ public class MyProtocol {
                         System.out.println("FREE");
                     } else if (m.getType() == MessageType.DATA) { // We received a data frame!
                         System.out.print("DATA: ");
-                        printByteBuffer(m.getData(), m.getData().capacity());
+//                        printByteBuffer(m.getData(), m.getData().capacity());
 
                         String data = printByteBuffer(m.getData(), m.getData().capacity());
 
