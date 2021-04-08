@@ -126,7 +126,11 @@ public class MyProtocol {
                         System.out.println("FREE");
                     } else if (m.getType() == MessageType.DATA) { // We received a data frame!
                         System.out.print("DATA: ");
-                        printByteBuffer(m.getData(), m.getData().capacity()); //Just print the data
+                        printByteBuffer(m.getData(), m.getData().capacity());
+
+                        // if()
+
+                        //Just print the data
                     } else if (m.getType() == MessageType.DATA_SHORT) { // We received a short data frame!
                         System.out.print("DATA_SHORT: ");
                         printByteBuffer(m.getData(), m.getData().capacity()); //Just print the data
