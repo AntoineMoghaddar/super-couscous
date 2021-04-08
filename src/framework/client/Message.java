@@ -14,13 +14,13 @@ public class Message {
 
     public Message(MessageType type, ByteBuffer data) {
         this.type = type;
-        ByteBuffer bb1 = ByteBuffer.allocate(32);
+       // ByteBuffer bb1 = ByteBuffer.allocate(32);
 //        byte[] source_address = getIp_id.getBytes();
 //        byte[] dest_address = getIp_id.getBytes();
 //        bb1.put(source_address);
 //        bb1.put(dest_address);
-        bb1.put(data);
-        this.data = bb1;
+     //   bb1.put(data);
+        this.data = data;
     }
 
 //    public Message(MessageType type, ByteBuffer data) {
