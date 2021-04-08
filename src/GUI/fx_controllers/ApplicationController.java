@@ -1,4 +1,4 @@
-package fx_controllers;
+package GUI.fx_controllers;
 
 import javafx.scene.control.ListView;
 

@@ -15,7 +15,7 @@ public class Packet {
 
         pckt[1] = source_address;
         pckt[2] = dest_address;
-        pckt[3]= 0 ; // sequence number
+        pckt[3] = 0; // sequence number
         pckt[4] = 0; // acknowledgement number
         pckt[5] = 0; // checksum
         //pckt[6] = data; data is stored from 6th byte onwards

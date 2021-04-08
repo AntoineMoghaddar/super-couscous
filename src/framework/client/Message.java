@@ -1,7 +1,7 @@
 package framework.client;
 
 import java.nio.ByteBuffer;
-//import packets.Packet;
+//import protocol.packets.Packet;
 public class Message {
     private MessageType type;
     private ByteBuffer data;
