@@ -105,10 +105,10 @@ public class MyProtocol {
 
         public void printByteBuffer(ByteBuffer bytes, int bytesLength) {
             for (int i = 0; i < bytesLength; i++) {
-                char byt = (char)bytes.get(i);
-                System.out.print(byt + " "); // try
+               // char byt = (char)bytes.get(i);
+               // System.out.print((char) bytes.get(i)); // try
+                  System.out.print(bytes.get(i));
 
-                //System.out.print(Byte.toString(bytes.get(i)) + " ");
             }
             System.out.println();
         }
