@@ -75,9 +75,15 @@ public class MyProtocol {
 
             Logger.notice(input);
 
+
             if (input != null) {
+                input = "IP" + input;
+                Logger.notice(input);
+
                 byte[] inputBytes = input.getBytes(); // get bytes from input
                 ByteBuffer toSend = ByteBuffer.allocate(inputBytes.length); // make a new byte buffer with the length of the input string
+                toSend.put(inputBytes, 0, inputBytes.length); // copy the input string into the byte buffer.
+
                 Logger.notice(toSend);
                 Message bc = new Message(MessageType.DATA, toSend);
 
@@ -103,14 +109,15 @@ public class MyProtocol {
             this.receivedQueue = receivedQueue;
         }
 
-        public void printByteBuffer(ByteBuffer bytes, int bytesLength) {
+        public String printByteBuffer(ByteBuffer bytes, int bytesLength) {
             for (int i = 0; i < bytesLength; i++) {
-               // char byt = (char)bytes.get(i);
-               // System.out.print((char) bytes.get(i)); // try
-                  System.out.print(bytes.get(i));
-
+                // char byt = (char)bytes.get(i);
+                // System.out.print((char) bytes.get(i)); // try
+//                  System.out.print(bytes.get(i) + " ");
+                System.out.print((char) bytes.get(i));
+                return String.valueOf((char) bytes.get(i));
             }
-            System.out.println();
+            return null;
         }
 
         // Handle messages from the server / audio framework
@@ -128,9 +135,12 @@ public class MyProtocol {
                         System.out.print("DATA: ");
                         printByteBuffer(m.getData(), m.getData().capacity());
 
-                        // if()
+                        String data = printByteBuffer(m.getData(), m.getData().capacity());
 
-                        //Just print the data
+                        if (data.startsWith("IP")) {
+                            Logger.debug(data);
+                        }
+// if()
                     } else if (m.getType() == MessageType.DATA_SHORT) { // We received a short data frame!
                         System.out.print("DATA_SHORT: ");
                         printByteBuffer(m.getData(), m.getData().capacity()); //Just print the data
