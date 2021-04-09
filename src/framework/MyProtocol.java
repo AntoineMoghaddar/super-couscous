@@ -122,7 +122,8 @@ public class MyProtocol {
 
         public String filterIP(String datapacket) {
             String[] data = datapacket.split("/");
-            return data[0];
+            String[] finalIP = data[0].split("IP");
+            return finalIP[1];
 //
 //            datapacket.substring(
 //                    datapacket.indexOf("IP"),
