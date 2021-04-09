@@ -32,6 +32,8 @@ public class MyProtocol {
     private BlockingQueue<Message> receivedQueue;
     private BlockingQueue<Message> sendingQueue;
 
+    private CouscousModel model = CouscousModel.getInstance();
+
     public MyProtocol(String server_ip, int server_port, int frequency) {
         receivedQueue = new LinkedBlockingQueue<Message>();
         sendingQueue = new LinkedBlockingQueue<Message>();
@@ -111,27 +113,6 @@ public class MyProtocol {
             this.receivedQueue = receivedQueue;
         }
 
-        public String printByteBuffer(ByteBuffer bytes, int bytesLength) {
-            StringBuilder data = new StringBuilder();
-            for (int i = 0; i < bytesLength; i++) {
-                // char byt = (char)bytes.get(i);
-                // System.out.print((char) bytes.get(i)); // try
-//                  System.out.print(bytes.get(i) + " ");
-                data.append((char) bytes.get(i));
-            }
-            return data.toString();
-        }
-
-        public String filterIP(String datapacket) {
-            String[] data = datapacket.split("/");
-            String[] finalIP = data[0].split("IP");
-            return finalIP[1];
-//
-//            datapacket.substring(
-//                    datapacket.indexOf("IP"),
-//                    datapacket.indexOf('|'));
-        }
-
         // Handle messages from the server / audio framework
         public void run() {
             while (true) {
@@ -145,14 +126,12 @@ public class MyProtocol {
                         System.out.println("FREE");
                     } else if (m.getType() == MessageType.DATA) { // We received a data frame!
                         System.out.print("DATA: ");
-//                        printByteBuffer(m.getData(), m.getData().capacity());
 
-                        String data = printByteBuffer(m.getData(), m.getData().capacity());
-
+                        String data = model.printByteBuffer(m.getData(), m.getData().capacity());
 
                         if (data.startsWith("IP")) {
-                            Logger.debug("This is the filtered IP: " + filterIP(data));
-                            CouscousModel.getInstance().addIP(filterIP(data));
+                            Logger.debug("This is the filtered IP: " + model.filterIP(data));
+                            CouscousModel.getInstance().addIP(model.filterIP(data));
                         } else {
                             Logger.confirm("this is not IP data.");
                             System.out.println(data);
@@ -160,7 +139,7 @@ public class MyProtocol {
 
                     } else if (m.getType() == MessageType.DATA_SHORT) { // We received a short data frame!
                         System.out.print("DATA_SHORT: ");
-                        printByteBuffer(m.getData(), m.getData().capacity()); //Just print the data
+                        model.printByteBuffer(m.getData(), m.getData().capacity()); //Just print the data
                     } else if (m.getType() == MessageType.DONE_SENDING) { // This node is done sending
                         System.out.println("DONE_SENDING");
                     } else if (m.getType() == MessageType.HELLO) { // Server / audio framework hello message. You don't have to handle this

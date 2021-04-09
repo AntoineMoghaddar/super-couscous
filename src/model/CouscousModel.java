@@ -10,6 +10,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -74,6 +75,25 @@ public class CouscousModel {
     public ArrayList<Address> getAddresses() {
         return addresses;
     }
+
+
+    public String printByteBuffer(ByteBuffer bytes, int bytesLength) {
+        StringBuilder data = new StringBuilder();
+        for (int i = 0; i < bytesLength; i++) {
+            // char byt = (char)bytes.get(i);
+            // System.out.print((char) bytes.get(i)); // try
+//                  System.out.print(bytes.get(i) + " ");
+            data.append((char) bytes.get(i));
+        }
+        return data.toString();
+    }
+
+    public String filterIP(String datapacket) {
+        String[] data = datapacket.split("/");
+        String[] finalIP = data[0].split("IP");
+        return finalIP[1];
+    }
+
 
     /**
      * call before closing connection.
