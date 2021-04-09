@@ -76,18 +76,13 @@ public class MyProtocol {
                 e.printStackTrace();
             }
 
-            Logger.notice(input);
-
-
             if (input != null) {
                 input = "IP" + input + "/";
-                Logger.notice(input);
 
                 byte[] inputBytes = input.getBytes(); // get bytes from input
                 ByteBuffer toSend = ByteBuffer.allocate(inputBytes.length); // make a new byte buffer with the length of the input string
                 toSend.put(inputBytes, 0, inputBytes.length); // copy the input string into the byte buffer.
 
-                Logger.notice(toSend);
                 Message bc = new Message(MessageType.DATA, toSend);
 
                 sendingQueue.put(bc);
@@ -133,6 +128,7 @@ public class MyProtocol {
                             CouscousModel.getInstance().addIP(model.filterIP(data));
                         } else {
                             Logger.confirm("this is not IP data.");
+                            //TODO Process this data into readable data.
                             System.out.println(data);
                         }
 
