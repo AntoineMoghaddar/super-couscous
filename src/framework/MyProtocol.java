@@ -4,6 +4,8 @@ import design.logging.Logger;
 import framework.client.Client;
 import framework.client.Message;
 import framework.client.MessageType;
+import model.CouscousModel;
+import packets.Address;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -149,10 +151,8 @@ public class MyProtocol {
 
 
                         if (data.startsWith("IP")) {
-                            Logger.confirm("this is IP data.");
-//                            Address a = new Address(data.toString());
-                            System.out.println("This is the normal datapacket: " + data);
-                            System.out.println("This is the filtered IP: " + filterIP(data));
+                            Logger.debug("This is the filtered IP: " + filterIP(data));
+                            CouscousModel.getInstance().addIP(filterIP(data));
                         } else {
                             Logger.confirm("this is not IP data.");
                             System.out.println(data);

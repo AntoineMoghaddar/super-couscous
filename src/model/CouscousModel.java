@@ -19,13 +19,15 @@ public class CouscousModel {
 
     private static CouscousModel instance = null;
     private static int ip_id = 0;
+    private static String filename;
 
     private CouscousModel() {
         in = new ImportIP();
         out = new ExportIP();
 
         addresses = in.getAddresses();
-        out.createFile("addressing.txt");
+        filename = "addressing.txt";
+        out.createFile(filename);
     }
 
     public static CouscousModel getInstance() {
@@ -43,15 +45,19 @@ public class CouscousModel {
                 create = false;
         }
 
-        if (create)
+        if (create) {
             addresses.add(new Address(ipaddress, ip_id));
-        else
+            ip_id++;
+        } else
             Logger.err("IP already exists.");
-
     }
 
     public ArrayList<Address> getAddresses() {
         return addresses;
+    }
+
+    public void closeConnection() {
+        out.writeToFile(filename, addresses);
     }
 
     /**

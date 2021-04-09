@@ -1,8 +1,11 @@
 package design.transfer;
 
+import packets.Address;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ExportIP {
 
@@ -21,11 +24,14 @@ public class ExportIP {
         }
     }
 
-    public void writeToFile(String filename) {
+    public void writeToFile(String filename, ArrayList<Address> addresses) {
         try {
             FileWriter myWriter = new FileWriter(filename);
 
-//          TODO  myWriter.write();
+            for (Address a : addresses) {
+                myWriter.write(a.getIp_id() + ";" + a.getIp_address());
+            }
+
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
