@@ -1,8 +1,8 @@
 package model;
 
-import design.logging.Logger;
-import design.transfer.ExportIP;
-import design.transfer.ImportIP;
+import helperClasses.logging.Logger;
+import helperClasses.transfer.ExportIP;
+import helperClasses.transfer.ImportIP;
 import org.apache.commons.codec.binary.Hex;
 import packets.Address;
 

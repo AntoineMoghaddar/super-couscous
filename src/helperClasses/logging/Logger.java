@@ -1,8 +1,8 @@
-package design.logging;
+package helperClasses.logging;
 
 import java.util.Arrays;
 
-import static design.logging.Logger.Type.*;
+import static helperClasses.logging.Logger.Type.*;
 
 
 /**

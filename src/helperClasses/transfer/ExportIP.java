@@ -1,4 +1,4 @@
-package design.transfer;
+package helperClasses.transfer;
 
 import packets.Address;
 
