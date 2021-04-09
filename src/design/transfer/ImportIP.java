@@ -11,8 +11,11 @@ public class ImportIP {
 
     private ArrayList<Address> addresses;
 
-    public void readFromFile(String filename) {
+    public ImportIP() {
         addresses = new ArrayList<>();
+    }
+
+    public void readFromFile(String filename) {
 
         try {
             Scanner in = new Scanner(new File(filename));

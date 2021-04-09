@@ -27,7 +27,9 @@ public class CouscousModel {
 
         addresses = in.getAddresses();
         filename = "addressing.txt";
+
         out.createFile(filename);
+        in.readFromFile(filename);
     }
 
     public static CouscousModel getInstance() {
