@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+
 import packets.Address;
 import model.CouscousModel;
 
@@ -14,21 +15,23 @@ public class Message {
     private ArrayList<Integer> destination_nodes;
     private CouscousModel damn;
     private int source_id;
-  //  private Packet pack;
-    public int get_source_add()
-    {
+    //  private Packet pack;
+
+    public int get_source_add() {
+
         ArrayList<Address> all_nodes;
-        all_nodes = damn.getInstance().getAddresses();
-        for(Address node : all_nodes){
-           try {
-               if (node.getIp_address().equals(InetAddress.getLocalHost().getHostAddress())) {
-                   source_id = node.getIp_id();
-               }
-               else{
-                   destination_nodes.add(node.getIp_id());
-               }
-           }catch(UnknownHostException e){
-               System.out.print("Host not found");
+        all_nodes = CouscousModel.getInstance().getAddresses();
+        destination_nodes = new ArrayList<>();
+
+        for (Address node : all_nodes) {
+            try {
+                if (node.getIp_address().equals(InetAddress.getLocalHost().getHostAddress())) {
+                    source_id = node.getIp_id();
+                } else {
+                    destination_nodes.add(node.getIp_id());
+                }
+            } catch (UnknownHostException e) {
+                System.out.print("Host not found");
             }
         }
         return source_id;
@@ -38,33 +41,35 @@ public class Message {
         this.type = type;
     }
     /*Notes for Antoine
-    *  if you get done with the ID/IP
+     *  if you get done with the ID/IP
      */
 
     public Message(MessageType type, ByteBuffer data) {
         this.type = type;
         ByteBuffer bb1 = ByteBuffer.allocate(32);
         int source = get_source_add();
-       // byte[] dest_address = getIp_id.getBytes();
-         bb1.put((byte) source);
+        // byte[] dest_address = getIp_id.getBytes();
+        bb1.put((byte) source);
         //bb1.put(dest_address);
         //bb1.put(data);
         this.data = data;
     }
-       public Message(MessageType type, ByteBuffer data, int data_length) {
-          this.type = type;
 
-            ByteBuffer bb1 = ByteBuffer.allocate(32);
-            int source = get_source_add();
+    public Message(MessageType type, ByteBuffer data, int data_length) {
+        this.type = type;
+
+        ByteBuffer bb1 = ByteBuffer.allocate(32);
+        int source = get_source_add();
         //byte[] dest_address = getIp_id.getBytes();
-            bb1.put((byte) source);
+        bb1.put((byte) source);
 //        //  bb1.put(dest_address);
-            bb1.put((byte) data_length);
+        bb1.put((byte) data_length);
 //// int header_length = source.size() + dest.size() + data_length.size();
-    //     bb1.put((byte) header_length);
-            bb1.put(data);
-            this.data = bb1;
-       }
+        //     bb1.put((byte) header_length);
+        bb1.put(data);
+        this.data = bb1;
+    }
+
     public MessageType getType() {
         return type;
     }
