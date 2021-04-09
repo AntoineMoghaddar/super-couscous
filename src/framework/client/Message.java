@@ -43,26 +43,26 @@ public class Message {
 
     public Message(MessageType type, ByteBuffer data) {
         this.type = type;
-        ByteBuffer bb1 = ByteBuffer.allocate(32);
+        ByteBuffer bb1 = ByteBuffer.allocate(34);
         int source = get_source_add();
         // byte[] dest_address = getIp_id.getBytes();
         bb1.put((byte) source);
         //bb1.put(dest_address);
-        //bb1.put(data);
-        this.data = data;
+        bb1.put(data);
+        this.data = bb1;
     }
 
     public Message(MessageType type, ByteBuffer data, int data_length) {
         this.type = type;
 
-        ByteBuffer bb1 = ByteBuffer.allocate(32);
+        ByteBuffer bb1 = ByteBuffer.allocate(34);
         int source = get_source_add();
         //byte[] dest_address = getIp_id.getBytes();
         bb1.put((byte) source);
 //        //  bb1.put(dest_address);
         bb1.put((byte) data_length);
 //// int header_length = source.size() + dest.size() + data_length.size();
-        //     bb1.put((byte) header_length);
+        //bb1.put((byte) header_length);
         bb1.put(data);
         this.data = bb1;
     }
