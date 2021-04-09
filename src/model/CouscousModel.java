@@ -8,6 +8,8 @@ import packets.Address;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -30,6 +32,12 @@ public class CouscousModel {
 
         out.createFile(filename);
         in.readFromFile(filename);
+
+        try {
+            addIP(InetAddress.getLocalHost().getHostAddress());
+        } catch (UnknownHostException e) {
+            System.exit(2);
+        }
     }
 
     public static CouscousModel getInstance() {
