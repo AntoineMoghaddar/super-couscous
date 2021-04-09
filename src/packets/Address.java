@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 
 public class Address {
 
-    private int ip_id;
+    private final int ip_id;
     private String ip_address;
 
     public Address(String getLocalhost, int id) {
