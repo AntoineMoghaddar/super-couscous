@@ -47,15 +47,27 @@ public class CouscousModel {
 
         if (create) {
             addresses.add(new Address(ipaddress, ip_id));
+            printIPs();
             ip_id++;
         } else
             Logger.err("IP already exists.");
+    }
+
+    private void printIPs() {
+        Logger.debug("The following IP's now exist: ");
+        for (Address a :
+                addresses) {
+            Logger.confirm(a.getIp_address() + " with identifier: /" + a.getIp_id());
+        }
     }
 
     public ArrayList<Address> getAddresses() {
         return addresses;
     }
 
+    /**
+     * call before closing connection.
+     */
     public void closeConnection() {
         out.writeToFile(filename, addresses);
     }
