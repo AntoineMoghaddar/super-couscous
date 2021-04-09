@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
  */
 public class ByteHandler {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         // Some testing
 
         byte a = 0;
