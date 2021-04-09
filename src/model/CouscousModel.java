@@ -27,8 +27,8 @@ public class CouscousModel {
         in = new ImportIP();
         out = new ExportIP();
 
-        addresses = in.getAddresses();
         filename = "addressing.txt";
+        addresses = in.getAddresses();
 
         out.createFile(filename);
         in.readFromFile(filename);
