@@ -13,7 +13,6 @@ public class Message {
     private MessageType type;
     private ByteBuffer data;
     private ArrayList<Integer> destination_nodes;
-    private CouscousModel damn;
     private int source_id;
     //  private Packet pack;
 
@@ -25,11 +24,9 @@ public class Message {
 
         for (Address node : all_nodes) {
             try {
-                if (node.getIp_address().equals(InetAddress.getLocalHost().getHostAddress())) {
+                if (node.getIp_address().equals(InetAddress.getLocalHost().getHostAddress()))
                     source_id = node.getIp_id();
-                } else {
-                    destination_nodes.add(node.getIp_id());
-                }
+                else destination_nodes.add(node.getIp_id());
             } catch (UnknownHostException e) {
                 System.out.print("Host not found");
             }
