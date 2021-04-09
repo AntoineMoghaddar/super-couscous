@@ -5,7 +5,6 @@ import framework.client.Client;
 import framework.client.Message;
 import framework.client.MessageType;
 import model.CouscousModel;
-import packets.Address;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
