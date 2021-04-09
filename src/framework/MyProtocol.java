@@ -4,7 +4,6 @@ import design.logging.Logger;
 import framework.client.Client;
 import framework.client.Message;
 import framework.client.MessageType;
-import packets.Address;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -78,7 +77,7 @@ public class MyProtocol {
 
 
             if (input != null) {
-                input = "IP" + input;
+                input = "IP" + input + "/";
                 Logger.notice(input);
 
                 byte[] inputBytes = input.getBytes(); // get bytes from input
@@ -121,6 +120,15 @@ public class MyProtocol {
             return data.toString();
         }
 
+        public String filterIP(String datapacket) {
+            String[] data = datapacket.split("/");
+            return data[0];
+//
+//            datapacket.substring(
+//                    datapacket.indexOf("IP"),
+//                    datapacket.indexOf('|'));
+        }
+
         // Handle messages from the server / audio framework
         public void run() {
             while (true) {
@@ -138,10 +146,12 @@ public class MyProtocol {
 
                         String data = printByteBuffer(m.getData(), m.getData().capacity());
 
+
                         if (data.startsWith("IP")) {
                             Logger.confirm("this is IP data.");
 //                            Address a = new Address(data.toString());
-                            System.out.println(data);
+                            System.out.println("This is the normal datapacket: " + data);
+                            System.out.println("This is the filtered IP: " + filterIP(data));
                         } else {
                             Logger.confirm("this is not IP data.");
                             System.out.println(data);
