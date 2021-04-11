@@ -59,7 +59,7 @@ public class ReceiveThread extends Thread {
         if (data_again.startsWith("IP")) {
             Logger.debug("This is the filtered IP: " + model.filterIP(data_again));
             model.addIP(model.filterIP(data_again));
-            System.out.print(data_again);
+//            System.out.print(data_again);
         } else {
             //Logger.confirm("this is not IP data.");
             //TODO Process this data into readable data.

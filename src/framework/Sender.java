@@ -23,8 +23,9 @@ public class Sender extends Thread {
         while (sock.isConnected()) {
             try {
                 Message msg = sendingQueue.take();
-                if (msg.getType() == MessageType.DATA || msg.getType() == MessageType.DATA_SHORT) {
+                if (msg.getData() != null && (msg.getType() == MessageType.DATA || msg.getType() == MessageType.DATA_SHORT)) {
                     ByteBuffer data = msg.getData();
+                    System.out.println("This is the value of data: " + msg.getData());
                     data.position(0); //reset position just to be sure
                     int length = data.capacity(); //assume capacity is also what we want to send here!
                     ByteBuffer toSend = ByteBuffer.allocate(length + 2);
