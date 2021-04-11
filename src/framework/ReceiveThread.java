@@ -5,6 +5,7 @@ import framework.client.MessageType;
 import helperClasses.logging.Logger;
 import model.CouscousModel;
 
+import java.nio.ByteBuffer;
 import java.util.concurrent.BlockingQueue;
 
 public class ReceiveThread extends Thread {
@@ -30,21 +31,10 @@ public class ReceiveThread extends Thread {
                     System.out.println("FREE");
                 } else if (m.getType() == MessageType.DATA) { // We received a data frame!
                     System.out.print("DATA: ");
-
-                    String data = model.printByteBuffer(m.getData(), m.getData().capacity());
-
-                    if (data.startsWith("IP")) {
-                        Logger.debug("This is the filtered IP: " + model.filterIP(data));
-                        model.addIP(model.filterIP(data));
-                    } else {
-                        Logger.confirm("this is not IP data.");
-                        //TODO Process this data into readable data.
-                        System.out.println(data);
-                    }
-
+                    printByteBuffer(m.getData(), m.getData().capacity());
                 } else if (m.getType() == MessageType.DATA_SHORT) { // We received a short data frame!
                     System.out.print("DATA_SHORT: ");
-                    model.printByteBuffer(m.getData(), m.getData().capacity()); //Just print the data
+                    printByteBuffer(m.getData(), m.getData().capacity()); //Just print the data
                 } else if (m.getType() == MessageType.DONE_SENDING) { // This node is done sending
                     System.out.println("DONE_SENDING");
                 } else if (m.getType() == MessageType.HELLO) { // Server / audio framework hello message. You don't have to handle this
@@ -60,4 +50,29 @@ public class ReceiveThread extends Thread {
             }
         }
     }
+    public void printByteBuffer(ByteBuffer bytes, int bytesLength) {
+        StringBuilder data = new StringBuilder();
+        for(int j = 0; j < bytesLength; j++) {
+            data.append((char) bytes.get(j));
+        }
+        String data_again = data.toString();
+        if (data_again.startsWith("IP")) {
+            Logger.debug("This is the filtered IP: " + model.filterIP(data_again));
+            model.addIP(model.filterIP(data_again));
+            System.out.print(data_again);
+        } else {
+            //Logger.confirm("this is not IP data.");
+            //TODO Process this data into readable data.
+            bytes.flip();
+            int src = bytes.get(0);
+            int dst = bytes.get(1);
+            int data_length = bytes.get(2);
+            int header_length = bytes.get(3);
+            for (int i = header_length; i < header_length + data_length; i++) {
+                System.out.print((char) bytes.get(i)); // prints only the data after the header in char
+            }
+
+        }
+    }
+
 }

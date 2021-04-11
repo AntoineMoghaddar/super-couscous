@@ -67,12 +67,11 @@ public class Message {
             data.flip();
             data.get(gg, 0 , gg.length);
             data.clear();
-            data.put((byte) 0);
+            data.put((byte) get_source_add());
             //destination_nodes.toArray();
-            data.put(destination_nodes.get(0));
+            data.put(destination_nodes.get(0)); // only uses the first destination node
             data.put((byte) data_length);
             data.put((byte) header_length);
-            //bb1.put((byte) header_length);
             data.put(gg);
             this.data = data;
         } catch (BufferOverflowException e) {
