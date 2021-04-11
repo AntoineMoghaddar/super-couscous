@@ -81,8 +81,7 @@ public class CouscousModel {
         StringBuilder data = new StringBuilder();
         for (int i = 0; i < bytesLength; i++) {
             // char byt = (char)bytes.get(i);
-            // System.out.print((char) bytes.get(i)); // try
-//                  System.out.print(bytes.get(i) + " ");
+            // System.out.print((char) bytes.get(i)); // prints out all the bytes in char
             data.append((char) bytes.get(i));
         }
         return data.toString();

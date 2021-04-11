@@ -49,10 +49,9 @@ public class MyProtocol {
                 ByteBuffer toSend = ByteBuffer.allocate(inputBytes.length); // make a new byte buffer with the length of the input string
                 toSend.put(inputBytes, 0, inputBytes.length); // copy the input string into the byte buffer.
                 Message msg;
-
                 if ((input.length()) > 2) {
-//                    msg = new Message(MessageType.DATA, toSend, inputBytes.length);
-                    msg = new Message(MessageType.DATA, toSend);
+                    msg = new Message(MessageType.DATA, toSend, inputBytes.length);
+                   // msg = new Message(MessageType.DATA, toSend);
 
                 } else {
                     msg = new Message(MessageType.DATA_SHORT, toSend);

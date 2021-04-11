@@ -14,10 +14,11 @@ import model.CouscousModel;
 public class Message {
     private MessageType type;
     private ByteBuffer data;
-   // private ArrayList<Integer> destination_nodes; // Activate after dry run
-   // private int source_id;                        // Activate after dry run
+    private ArrayList<Byte> destination_nodes; // Activate after dry run
+    private int source_id;
+    private int header_length;
     //private int destination_id;
-   /* public int get_source_add() {
+    public int get_source_add() {
 
         ArrayList<Address> all_nodes;
         all_nodes = CouscousModel.getInstance().getAddresses();
@@ -27,13 +28,13 @@ public class Message {
             try {
                 if (node.getIp_address().equals(InetAddress.getLocalHost().getHostAddress()))
                     source_id = node.getIp_id();
-                else destination_nodes.add(node.getIp_id());
+                else destination_nodes.add((byte)node.getIp_id());
             } catch (UnknownHostException e) {
                 System.out.print("Host not found");
             }
         }
         return source_id;
-    }*/ // Activate after dry run
+    }
 
     // public int get_dest_add() { return destination_id;}
     public Message(MessageType type) {
@@ -47,8 +48,8 @@ public class Message {
             data.flip();
             data.get(gg, 0 , gg.length);
             data.clear();
-            data.put((byte) 68);
-//          bb1.put((byte)destination);
+            data.put((byte) get_source_add());
+            data.put(destination_nodes.get(0));
             data.put(gg);
             this.data = data;
         }catch(BufferOverflowException e) {
@@ -66,10 +67,11 @@ public class Message {
             data.flip();
             data.get(gg, 0 , gg.length);
             data.clear();
-            data.put((byte) 68);
-//          bb1.put((byte)destination);
+            data.put((byte) 0);
+            //destination_nodes.toArray();
+            data.put(destination_nodes.get(0));
             data.put((byte) data_length);
-//// int header_length = source.size() + dest.size() + data_length.size();
+            data.put((byte) header_length);
             //bb1.put((byte) header_length);
             data.put(gg);
             this.data = data;
@@ -81,6 +83,9 @@ public class Message {
         }
     }
 
+  /*  public int get_header_length(){
+        return header_length;
+    }*/
     public MessageType getType() {
         return type;
     }
@@ -88,7 +93,7 @@ public class Message {
     public ByteBuffer getData() {
         return data;
     }
-   /* public static void main(String[] args){
+  /*  public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         String give = "";
         give = sc.nextLine();
@@ -97,9 +102,14 @@ public class Message {
         Message mm = new Message(MessageType.DATA, bb, give.length());
         bb.flip();
         try{
-        System.out.print("fuck" + " "+ (char) bb.get(21));
+        System.out.print("source_id" + ":"+ bb.get(0));
+        System.out.print("\ndata_length:" + bb.get(1));
+        System.out.print("\nheader_length:" + bb.get(2) + '\n');  // header_length = bb.get(2)
+        for(int i = bb.get(2); i < (bb.get(2) + bb.get(1)); i++) {
+            System.out.print((char) bb.get(i));
+        }
         }catch(IndexOutOfBoundsException e){
             System.out.print("The exception fucked it over");
         }
-    } */
+    }*/
 }
