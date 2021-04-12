@@ -2,6 +2,7 @@ package framework;
 
 import framework.client.Message;
 import framework.client.MessageType;
+import prots.macprotocol.FinalMac;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -88,12 +89,15 @@ public class Listener extends Thread {
         }
     }
 
-    public void printByteBuffer(ByteBuffer bytes, int bytesLength) {
-        System.out.print("DATA: ");
-        for (int i = 0; i < bytesLength; i++) {
-            System.out.print(Byte.toString(bytes.get(i)) + " ");
-        }
-        System.out.println();
+    public void printByteBuffer(ByteBuffer bytes, int bytesLength) throws InterruptedException {
+//            if(bytes.get(0) == myIP_Id){
+//                m.getType() == MessageType.DATA_SHORT
+//                Sender.fillFinalQueue().turnToSend;
+            System.out.print("DATA: ");
+            for (int i = 0; i < bytesLength; i++) {
+                System.out.print(Byte.toString(bytes.get(i)) + " ");
+            }
+            System.out.println();
     }
 
     public void receivingLoop() {
