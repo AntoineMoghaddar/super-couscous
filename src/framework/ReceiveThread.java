@@ -52,8 +52,12 @@ public class ReceiveThread extends Thread {
     }
     public void printByteBuffer(ByteBuffer bytes, int bytesLength) {
         StringBuilder data = new StringBuilder();
-        for(int j = 0; j < bytesLength; j++) {
-            data.append((char) bytes.get(j));
+        try {
+            for (int j = 0; j < bytesLength; j++) {
+                data.append((char) bytes.get(j));
+            }
+        }catch(IndexOutOfBoundsException e){
+            System.out.print("Index Excpetion");
         }
         String data_again = data.toString();
         if (data_again.startsWith("IP")) {
@@ -63,15 +67,19 @@ public class ReceiveThread extends Thread {
         } else {
             //Logger.confirm("this is not IP data.");
             //TODO Process this data into readable data.
-            bytes.flip();
-            int src = bytes.get(0);
-            int dst = bytes.get(1);
-            int data_length = bytes.get(2);
-            int header_length = bytes.get(3);
-            for (int i = header_length; i < header_length + data_length; i++) {
-                System.out.print((char) bytes.get(i)); // prints only the data after the header in char
+                try{
+                bytes.flip();
+                int src = bytes.get(0);
+                int dst = bytes.get(1);
+                int data_length = bytes.get(2);
+                int header_length = bytes.get(3);
+                System.out.print("Data:");
+                for (int i = header_length; i < header_length + data_length; i++) {
+                    System.out.print((char) bytes.get(i)); // prints only the data after the header in char
+                }
+            }catch(IndexOutOfBoundsException e){
+                System.out.print("Index exception");
             }
-
         }
     }
 

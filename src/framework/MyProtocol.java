@@ -52,14 +52,29 @@ public class MyProtocol {
                 ByteBuffer toSend = ByteBuffer.allocate(inputBytes.length); // make a new byte buffer with the length of the input string
                 toSend.put(inputBytes, 0, inputBytes.length); // copy the input string into the byte buffer.
                 Message msg;
-                if ((input.length()) > 2) {
+                if(input.length() > 26){  // data = 26 bytes and packet_header = 6 bytes
+                    ByteBuffer toSend1 = ByteBuffer.allocate(26);
+                    for(int i = 0; i < 27; i++){
+                        toSend1.put(inputBytes[i]);
+                    }
+                    ByteBuffer toSend2 = ByteBuffer.allocate(26);
+                    for(int j = 27; j < input.length(); j++){
+                        toSend2.put(inputBytes[j]);
+                    }
+                    Message msg2;
+                    msg = new Message(MessageType.DATA, toSend1, 26);                 // fragments of data
+                    msg2 = new Message(MessageType.DATA, toSend2, input.length()-26); // 2nd fragment of data
+                    sendingQueue.put(msg);
+                    sendingQueue.put(msg2);
+                } else if (input.length() > 2 && input.length() < 27) {
                     msg = new Message(MessageType.DATA, toSend, inputBytes.length);
                    // msg = new Message(MessageType.DATA, toSend);
-
+                    sendingQueue.put(msg);
                 } else {
                     msg = new Message(MessageType.DATA_SHORT, toSend);
+                    sendingQueue.put(msg);
                 }
-                sendingQueue.put(msg);
+                //sendingQueue.put(msg);
             }
         } catch (InterruptedException e) {
             System.exit(2);

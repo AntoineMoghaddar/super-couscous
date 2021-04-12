@@ -59,22 +59,22 @@ public class Sender extends Thread {
     private void senderLoop() {
         while (sock.isConnected()) {
             try {
-                Message msg = finalQueue.take();
-                if (msg.getType() == MessageType.DATA || msg.getType() == MessageType.DATA_SHORT) {
+                Message msg = sendingQueue.take();
+                if (msg.getData() != null && (msg.getType() == MessageType.DATA || msg.getType() == MessageType.DATA_SHORT)) {
                     ByteBuffer data = msg.getData();
-                    System.out.println("This is the value of data: " + msg.getData());
-                    data.position(0); //reset position just to be sure
+                    // System.out.println("This is the value of data: " + msg.getData());
+                    //data.position(0); //reset position just to be sure
                     int length = data.capacity(); //assume capacity is also what we want to send here!
-                    ByteBuffer toSend = ByteBuffer.allocate(length + 2);
-                    if (msg.getType() == MessageType.DATA) {
-                        toSend.put((byte) 3);
+                    ByteBuffer toSend = ByteBuffer.allocate(length);
+                  /*  if (msg.getType() == MessageType.DATA) {
+                        toSend.put((byte) 3);   // why is this 3
                     } else { // must be DATA_SHORT due to check above
-                        toSend.put((byte) 6);
+                        toSend.put((byte) 6);   // why is this 6
                     }
-                    toSend.put((byte) length);
+                    toSend.put((byte) length);*/
                     toSend.put(data);
                     toSend.position(0);
-                    // System.out.println("Sending "+Integer.toString(length)+" bytes!");
+                    System.out.println("Sending "+ length +" bytes!");
                     sock.write(toSend);
                 }
             } catch (IOException e) {
