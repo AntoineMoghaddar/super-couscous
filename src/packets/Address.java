@@ -1,6 +1,6 @@
 package packets;
 
-import helperClasses.logging.Logger;
+import  helperClasses.logging.Logger;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
