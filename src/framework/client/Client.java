@@ -34,8 +34,9 @@ public class Client {
         try {
             sock = SocketChannel.open();
             sock.connect(new InetSocketAddress(server_ip, server_port));
-            listener = new Listener(sock, receivedQueue);
             sender = new Sender(sock, sendingQueue);
+            listener = new Listener(sock, receivedQueue, sender);
+
 
             sender.sendConnect(frequency);
 

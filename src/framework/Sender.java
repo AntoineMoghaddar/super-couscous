@@ -4,7 +4,6 @@ import framework.client.Message;
 import framework.client.MessageType;
 import model.CouscousModel;
 import packets.Address;
-import prots.macprotocol.FinalMac;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -25,36 +24,53 @@ public class Sender extends Thread {
         this.sock = sock;
     }
     //added by tessa
-    public void fillFinalQueue() throws InterruptedException {
-        CouscousModel model = CouscousModel.getInstance();
-        packets.Address idNextNode;
-        ArrayList<Address> addressList = model.getAddresses();
-        Address myIP = addressList.get(0);
-        int myIP_Id = model.getAddresses().get(0).getIp_id();
-        int myIPIndex = addressList.indexOf(myIP);
-        int amountNodes = 4;
-        Message token;
-        String ipNextNode;
-        ArrayList<Integer> IP_idList = new ArrayList<>();
 
+    CouscousModel model = CouscousModel.getInstance();
+    ArrayList<Address> addressList = model.getAddresses();
+    Address myIP = addressList.get(0);
+    int myIP_Id = model.getAddresses().get(0).getIp_id();
+    int myIPIndex = addressList.indexOf(myIP);
+    int amountNodes = addressList.size();
+    Message token;
+    String ipNextNode;
+    ArrayList<Integer> IP_idList = new ArrayList<>();
+
+    public void turnToSend(ByteBuffer tokenMessage) throws InterruptedException {
         for (int i = 0; i < addressList.size(); i++) {
-            IP_idList.add(model.getAddresses().get(i).getIp_id());
-        }
+            if(!IP_idList.contains(model.getAddresses().get(i).getIp_id())){
+            IP_idList.add(model.getAddresses().get(i).getIp_id());}
         Collections.sort(IP_idList);
-
-        int myIP_IdIndex = IP_idList.indexOf(myIP_Id);
-
-        public void turnToSend(){
-            Object firstInQueue = sendingQueue.element();
+            int myIP_IdIndex = IP_idList.indexOf(myIP_Id);
+            int previousIP = IP_idList.get(myIP_IdIndex-1);
+            int sourceID = tokenMessage.get(0);
+            int destID =tokenMessage.get(1);
+            if(sourceID == previousIP && destID == myIP_Id) {
+                sendWithToken();
+        }
+    }}
+    public void sendWithToken() throws InterruptedException {
+            Message firstInQueue = sendingQueue.element();
             sendingQueue.take();
-            //then we need to send the token, a DATA_SHORT message
-            ipNextNode = "" + IP_idList.get((myIP_IdIndex + 1) % amountNodes) + "";
-            byte[] inputBytes = ipNextNode.getBytes(); // get bytes from input
-            java.nio.ByteBuffer toSend = ByteBuffer.allocate(inputBytes.length); // make a new byte buffer with the length of the input string
-            toSend.put(inputBytes, 0, inputBytes.length);
+            finalQueue.add(firstInQueue);
+            int myIP_IdIndex = IP_idList.indexOf(myIP_Id);
+        //then we need to send the token, a DATA_SHORT message
+            String destinationIP_id = "" + IP_idList.get((myIP_IdIndex + 1) % amountNodes) + "";
+            byte[] inputDest = destinationIP_id.getBytes(); // get bytes from input
+            String sourceIP_Id = "" + myIP_Id + "";
+            byte[] inputSource = sourceIP_Id.getBytes(); // get bytes from input
+            java.nio.ByteBuffer toSend = ByteBuffer.allocate(inputDest.length + inputSource.length); // make a new byte buffer with the length of the input string
+            toSend.put(inputSource, 0, inputSource.length);
+            toSend.put(inputDest, 1, inputDest.length);
             token = new Message(MessageType.DATA_SHORT, toSend);
             finalQueue.add(token);
         }
+
+//    private void tookTooLong(){
+//        while (sock.isConnected()) {
+//            if (sendingQueue.size() > 5){
+
+            //}}}
+
 
     private void senderLoop() {
         while (sock.isConnected()) {
@@ -82,8 +98,9 @@ public class Sender extends Thread {
             } catch (InterruptedException e) {
                 System.err.println("Failed to take from sendingQueue: " + e);
             }
-       // }
-    }}
+            // }
+        }
+    }
 
     public void sendConnect(int frequency) {
         ByteBuffer buff = ByteBuffer.allocate(4);

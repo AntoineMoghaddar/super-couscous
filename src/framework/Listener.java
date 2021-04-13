@@ -2,7 +2,7 @@ package framework;
 
 import framework.client.Message;
 import framework.client.MessageType;
-import prots.macprotocol.FinalMac;
+
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -12,11 +12,13 @@ import java.util.concurrent.BlockingQueue;
 public class Listener extends Thread {
     private BlockingQueue<Message> receivedQueue;
     private SocketChannel sock;
+    private Sender senderA;
 
-    public Listener(SocketChannel sock, BlockingQueue<Message> receivedQueue) {
+    public Listener(SocketChannel sock, BlockingQueue<Message> receivedQueue, Sender senderA) {
         super();
         this.receivedQueue = receivedQueue;
         this.sock = sock;
+        this.senderA = senderA;
     }
 
     private ByteBuffer messageBuffer = ByteBuffer.allocate(1024);
@@ -47,7 +49,10 @@ public class Listener extends Thread {
                         temp.put(messageBuffer);
                         temp.rewind();
                         if (shortData) {
-                            receivedQueue.put(new Message(MessageType.DATA_SHORT, temp));
+                            //receivedQueue.put(new Message(MessageType.DATA_SHORT, temp))
+                            //calls turnToSend in Sender, we received a data short check there if it is our token
+                            senderA.turnToSend(temp);
+
                         } else {
                             receivedQueue.put(new Message(MessageType.DATA, temp));
                         }
@@ -90,9 +95,6 @@ public class Listener extends Thread {
     }
 
     public void printByteBuffer(ByteBuffer bytes, int bytesLength) throws InterruptedException {
-//            if(bytes.get(0) == myIP_Id){
-//                m.getType() == MessageType.DATA_SHORT
-//                Sender.fillFinalQueue().turnToSend;
             System.out.print("DATA: ");
             for (int i = 0; i < bytesLength; i++) {
                 System.out.print(Byte.toString(bytes.get(i)) + " ");
