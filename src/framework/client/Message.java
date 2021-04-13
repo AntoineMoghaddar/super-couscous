@@ -44,13 +44,14 @@ public class Message {
     public Message(MessageType type, ByteBuffer data) {
         this.type = type;
         try {
-            byte[] gg = new byte[data.position()];
+            byte[] gg = new byte[2];
             data.flip();
             data.get(gg, 0 , gg.length);
             data.clear();
+            data.position(0);
             data.put((byte) get_source_add());
             data.put(destination_nodes.get(0));
-            data.put(gg);
+           // data.put(gg);
             this.data = data;
         }catch(BufferOverflowException e) {
             System.out.print("current position is higher than limit");
@@ -63,10 +64,11 @@ public class Message {
     public Message(MessageType type, ByteBuffer data, int data_length) {
         this.type = type;
         try {
-            byte[] gg = new byte[data.position()];
+            byte[] gg = new byte[32];
             data.flip();
-            data.get(gg, 0 , gg.length);
+            data.get(gg, 0 , data_length);
             data.clear();
+            data.position(0); // just to be sure
             data.put((byte) get_source_add());
             //destination_nodes.toArray();
             data.put(destination_nodes.get(0)); // only uses the first destination node
