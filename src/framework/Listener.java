@@ -49,9 +49,9 @@ public class Listener extends Thread {
                         temp.put(messageBuffer);
                         temp.rewind();
                         if (shortData) {
-                            //receivedQueue.put(new Message(MessageType.DATA_SHORT, temp))
+                            receivedQueue.put(new Message(MessageType.DATA_SHORT, temp));
                             //calls turnToSend in Sender, we received a data short check there if it is our token
-                            senderA.turnToSend(temp);
+//                            senderA.turnToSend(temp);
 
                         } else {
                             receivedQueue.put(new Message(MessageType.DATA, temp));
@@ -95,11 +95,11 @@ public class Listener extends Thread {
     }
 
     public void printByteBuffer(ByteBuffer bytes, int bytesLength) throws InterruptedException {
-            System.out.print("DATA: ");
-            for (int i = 0; i < bytesLength; i++) {
-                System.out.print(Byte.toString(bytes.get(i)) + " ");
-            }
-            System.out.println();
+        System.out.print("DATA: ");
+        for (int i = 0; i < bytesLength; i++) {
+            System.out.print(Byte.toString(bytes.get(i)) + " ");
+        }
+        System.out.println();
     }
 
     public void receivingLoop() {

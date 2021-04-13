@@ -68,7 +68,7 @@ public class CouscousModel {
         Logger.debug("The following IP's now exist: ");
         for (Address a :
                 addresses) {
-            Logger.confirm(a.getIp_address() + " with identifier: /" + a.getIp_id());
+            Logger.confirm(a.getIp_address() + " with identifier: " + a.getIp_id());
         }
     }
 

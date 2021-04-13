@@ -37,39 +37,42 @@ public class Sender extends Thread {
 
     public void turnToSend(ByteBuffer tokenMessage) throws InterruptedException {
         for (int i = 0; i < addressList.size(); i++) {
-            if(!IP_idList.contains(model.getAddresses().get(i).getIp_id())){
-            IP_idList.add(model.getAddresses().get(i).getIp_id());}
-        Collections.sort(IP_idList);
+            if (!IP_idList.contains(model.getAddresses().get(i).getIp_id())) {
+                IP_idList.add(model.getAddresses().get(i).getIp_id());
+            }
+            Collections.sort(IP_idList);
             int myIP_IdIndex = IP_idList.indexOf(myIP_Id);
-            int previousIP = IP_idList.get(myIP_IdIndex-1);
+            int previousIP = IP_idList.get(myIP_IdIndex - 1);
             int sourceID = tokenMessage.get(0);
-            int destID =tokenMessage.get(1);
-            if(sourceID == previousIP && destID == myIP_Id) {
+            int destID = tokenMessage.get(1);
+            if (sourceID == previousIP && destID == myIP_Id) {
                 sendWithToken();
+            }
         }
-    }}
+    }
+
     public void sendWithToken() throws InterruptedException {
-            Message firstInQueue = sendingQueue.element();
-            sendingQueue.take();
-            finalQueue.add(firstInQueue);
-            int myIP_IdIndex = IP_idList.indexOf(myIP_Id);
+        Message firstInQueue = sendingQueue.element();
+        sendingQueue.take();
+        finalQueue.add(firstInQueue);
+        int myIP_IdIndex = IP_idList.indexOf(myIP_Id);
         //then we need to send the token, a DATA_SHORT message
-            String destinationIP_id = "" + IP_idList.get((myIP_IdIndex + 1) % amountNodes) + "";
-            byte[] inputDest = destinationIP_id.getBytes(); // get bytes from input
-            String sourceIP_Id = "" + myIP_Id + "";
-            byte[] inputSource = sourceIP_Id.getBytes(); // get bytes from input
-            java.nio.ByteBuffer toSend = ByteBuffer.allocate(inputDest.length + inputSource.length); // make a new byte buffer with the length of the input string
-            toSend.put(inputSource, 0, inputSource.length);
-            toSend.put(inputDest, 1, inputDest.length);
-            token = new Message(MessageType.DATA_SHORT, toSend);
-            finalQueue.add(token);
-        }
+        String destinationIP_id = "" + IP_idList.get((myIP_IdIndex + 1) % amountNodes) + "";
+        byte[] inputDest = destinationIP_id.getBytes(); // get bytes from input
+        String sourceIP_Id = "" + myIP_Id + "";
+        byte[] inputSource = sourceIP_Id.getBytes(); // get bytes from input
+        java.nio.ByteBuffer toSend = ByteBuffer.allocate(inputDest.length + inputSource.length); // make a new byte buffer with the length of the input string
+        toSend.put(inputSource, 0, inputSource.length);
+        toSend.put(inputDest, 1, inputDest.length);
+        token = new Message(MessageType.DATA_SHORT, toSend);
+        finalQueue.add(token);
+    }
 
 //    private void tookTooLong(){
 //        while (sock.isConnected()) {
 //            if (sendingQueue.size() > 5){
 
-            //}}}
+    //}}}
 
 
     private void senderLoop() {
@@ -90,7 +93,7 @@ public class Sender extends Thread {
                     toSend.put((byte) length);*/
                     toSend.put(data);
                     toSend.position(0);
-                    System.out.println("Sending "+ length +" bytes!");
+                    System.out.println("Sending " + length + " bytes!");
                     sock.write(toSend);
                 }
             } catch (IOException e) {
