@@ -10,7 +10,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-//import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -52,8 +51,10 @@ public class CouscousModel {
         boolean create = true;
 
         for (Address ip : addresses) {
-            if (ip.getIp_address().equals(ipaddress))
+            if (ip.getIp_address().equals(ipaddress)) {
                 create = false;
+                break;
+            }
         }
 
         if (create) {
