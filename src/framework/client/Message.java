@@ -7,16 +7,18 @@ import java.nio.ByteBuffer;
 import java.nio.ReadOnlyBufferException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 import packets.Address;
 import model.CouscousModel;
 
-    // DON'T MAKE ANY CHANGES TO ANYTHING--- Ujjwal
+// DON'T MAKE ANY CHANGES TO ANYTHING--- Ujjwal
 public class Message {
     private MessageType type;
     private ByteBuffer data;
     private ArrayList<Byte> destination_nodes; // Activate after dry run
     private int source_id;
     private int header_length;
+
     //private int destination_id;
     public int get_source_add() {
 
@@ -28,7 +30,7 @@ public class Message {
             try {
                 if (node.getIp_address().equals(InetAddress.getLocalHost().getHostAddress()))
                     source_id = node.getIp_id();
-                else destination_nodes.add((byte)node.getIp_id());
+                else destination_nodes.add((byte) node.getIp_id());
             } catch (UnknownHostException e) {
                 System.out.print("Host not found");
             }
@@ -46,17 +48,17 @@ public class Message {
         try {
             byte[] gg = new byte[2];
             data.flip();
-            data.get(gg, 0 , gg.length);
+            data.get(gg, 0, gg.length);
             data.clear();
             data.position(0);
             data.put((byte) get_source_add());
             data.put(destination_nodes.get(0));
            // data.put(gg);
             this.data = data;
-        }catch(BufferOverflowException e) {
+        } catch (BufferOverflowException e) {
             System.out.print("current position is higher than limit");
             System.out.print("Exception e");
-        }catch(ReadOnlyBufferException e) {
+        } catch (ReadOnlyBufferException e) {
             System.out.print("Exception again" + e);
         }
     }
@@ -66,6 +68,7 @@ public class Message {
         try {
             byte[] gg = new byte[32];
             data.flip();
+          //  data.get(gg, 0, gg.length);
             data.get(gg, 0 , data_length);
             data.clear();
             data.position(0); // just to be sure
@@ -84,9 +87,9 @@ public class Message {
         }
     }
 
-  /*  public int get_header_length(){
-        return header_length;
-    }*/
+    /*  public int get_header_length(){
+          return header_length;
+      }*/
     public MessageType getType() {
         return type;
     }

@@ -34,8 +34,8 @@ public class MyProtocol {
     private BlockingQueue<Message> sendingQueue;
 
     public MyProtocol(String server_ip, int server_port, int frequency) {
-        receivedQueue = new LinkedBlockingQueue<Message>();
-        sendingQueue = new LinkedBlockingQueue<Message>();
+        receivedQueue = new LinkedBlockingQueue<>();
+        sendingQueue = new LinkedBlockingQueue<>();
 
         new Client(SERVER_IP, SERVER_PORT, frequency, receivedQueue, sendingQueue); // Give the client the Queues to use
         broadcastIP();
