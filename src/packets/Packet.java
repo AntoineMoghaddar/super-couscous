@@ -1,34 +1,26 @@
 package packets;
 
 public class Packet {
+    private static final int SIZE = 32;
 
-    private int[] pckt = new int[32];
-    private int source_address, dest_address;
+    private int s_address, d_addres, seq, offset;
+    private boolean followup;
 
-    public Packet(int sou_address, int dest_address) {
-        this.source_address = sou_address;
-        this.dest_address = dest_address;
+    private String data;
+
+
+    public Packet(int s_address, int d_addres, int seq, int offset, boolean followup, String data) {
+        this.s_address = s_address;
+        this.d_addres = d_addres;
+        this.seq = seq;
+        this.offset = offset;
+        this.followup = followup;
+        this.data = data;
     }
 
-    public void setupPacket() {
-        assert pckt != null;
-
-        pckt[1] = source_address;
-        pckt[2] = dest_address;
-        pckt[3] = 0; // sequence number
-        pckt[4] = 0; // acknowledgement number
-        pckt[5] = 0; // checksum
-        //pckt[6] = data; data is stored from 6th byte onwards
+    public Packet(int[] packet){
+        this.s_address = packet[0];
 
     }
-
-    public int getSource_address() {
-        return source_address;
-    }
-
-    public int getDest_address() {
-        return dest_address;
-    }
-
 
 }
