@@ -1,5 +1,9 @@
 package packets;
 
+import framework.client.Message;
+
+import java.nio.ByteBuffer;
+
 public class Packet {
     private static final int SIZE = 32;
 
@@ -9,9 +13,9 @@ public class Packet {
     private String data;
 
 
-    public Packet(int s_address, int d_addres, int seq, int offset, boolean followup, String data) {
+    public Packet(int s_address, int d_address, int seq, int offset, boolean followup, String data) {
         this.s_address = s_address;
-        this.d_addres = d_addres;
+        this.d_address = d_address;
         this.seq = seq;
         this.offset = offset;
         this.followup = followup;
